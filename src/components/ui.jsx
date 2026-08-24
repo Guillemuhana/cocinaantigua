@@ -4,18 +4,18 @@ import { NavLink } from 'react-router-dom'
    La jerarquía sale del tamaño y del peso, sin ornamento alrededor. */
 export function Placa({ children, sub, className = '' }) {
   return (
-    <div className={className}>
-      <h1 className="text-2xl sm:text-3xl leading-tight">{children}</h1>
-      {sub && <p className="text-sm text-tinta-50 mt-1.5">{sub}</p>}
+    <div className={`entra ${className}`}>
+      <h1 className="display-2">{children}</h1>
+      {sub && <p className="text-tinta-50 mt-2.5">{sub}</p>}
     </div>
   )
 }
 
-export function Hoja({ children, className = '' }) {
-  return <div className={`hoja rounded-xl ${className}`}>{children}</div>
+export function Hoja({ children, className = '', viva = false }) {
+  return <div className={`hoja rounded-2xl ${viva ? 'hoja-viva' : ''} ${className}`}>{children}</div>
 }
 
-export function Dato({ etiqueta, valor, detalle, tono = 'normal' }) {
+export function Dato({ etiqueta, valor, detalle, tono = 'normal', destacado = false }) {
   const color = {
     normal: 'text-tinta',
     bien:   'text-laurel',
@@ -25,9 +25,20 @@ export function Dato({ etiqueta, valor, detalle, tono = 'normal' }) {
   return (
     <div>
       <p className="text-xs font-medium text-tinta-50">{etiqueta}</p>
-      <p className={`cifra text-2xl font-semibold mt-1 ${color}`}>{valor}</p>
-      {detalle && <p className="text-xs text-tinta-50 mt-1">{detalle}</p>}
+      <p className={`mt-1.5 ${destacado ? 'cifra-xl' : 'cifra text-2xl font-semibold'} ${color}`}>{valor}</p>
+      {detalle && <p className="text-xs text-tinta-50 mt-1.5">{detalle}</p>}
     </div>
+  )
+}
+
+/* Punto de estado con su texto al lado. Late sólo cuando algo está en curso. */
+export function Estado({ children, tono = 'bien', vivo = false }) {
+  const color = { bien: 'text-laurel', aviso: 'text-damasco', mal: 'text-membrillo', neutro: 'text-tinta-50' }[tono]
+  return (
+    <span className={`inline-flex items-center gap-2 text-xs font-medium ${color}`}>
+      <span className={`punto ${vivo ? 'punto-vivo' : ''}`} />
+      {children}
+    </span>
   )
 }
 
@@ -51,10 +62,11 @@ export function Boton({ children, variante = 'primario', className = '', ...prop
   const estilos = {
     primario: 'bg-higo text-papel hover:bg-higo-claro shadow-sm',
     accion:   'bg-higo text-papel hover:bg-higo-claro shadow-sm',
-    fantasma: 'bg-papel border border-tinta/15 text-tinta hover:bg-papel-2',
+    fantasma: 'bg-papel border border-tinta/15 text-tinta hover:bg-papel-2 hover:border-tinta/30',
+    oscuro:   'bg-tinta text-papel hover:bg-tinta/90 shadow-sm',
   }[variante]
   return (
-    <button className={`btn px-4 py-2.5 rounded-lg text-sm ${estilos} disabled:opacity-40 disabled:cursor-not-allowed ${className}`} {...props}>
+    <button className={`btn px-5 py-2.5 rounded-xl text-sm ${estilos} disabled:opacity-40 disabled:cursor-not-allowed ${className}`} {...props}>
       {children}
     </button>
   )

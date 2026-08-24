@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useStore } from '../lib/store'
 import { money, num } from '../lib/format'
 import { descripcionesWeb } from '../lib/demoData'
+import Firma from '../components/Firma'
 
 /* ===========================================================================
    Tienda pública.
@@ -49,12 +50,12 @@ export default function Tienda() {
   return (
     <div className="min-h-dvh bg-papel">
       <header className="border-b border-tinta/12 sticky top-0 bg-papel/90 backdrop-blur z-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 h-16 flex items-center gap-4">
-          <div className="flex items-center gap-3">
-            <img src="/marca.png" alt="" width="36" height="36" className="w-9 h-9 shrink-0" />
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 h-24 flex items-center gap-4">
+          <div className="flex items-center gap-3.5">
+            <img src="/marca.png" alt="" width="64" height="64" className="w-14 h-14 sm:w-16 sm:h-16 shrink-0" />
             <div>
-              <p className="text-lg font-semibold tracking-tight leading-none">Cocina Antigua</p>
-              <p className="text-xs text-tinta-50 mt-1">Mermeladas de olla</p>
+              <p className="text-xl font-bold tracking-tight leading-none">Cocina Antigua</p>
+              <p className="text-xs text-tinta-50 mt-1.5">Mermeladas de olla</p>
             </div>
           </div>
           <div className="ml-auto flex items-center gap-3">
@@ -82,37 +83,63 @@ export default function Tienda() {
         </div>
       )}
 
-      {/* Hero: lo que hace distinta a esta marca son las ferias */}
-      <section className="mx-auto max-w-5xl px-4 sm:px-6 pt-14 pb-12">
-        <p className="eyebrow text-higo">Desde 2016 · Producción familiar</p>
-        <h1 className="font-display text-4xl sm:text-6xl leading-[0.95] mt-4 max-w-2xl">
-          Diez años cocinando en olla<br />
-          <span className="text-higo">y viajando con la olla</span>
-        </h1>
-        <p className="mt-6 max-w-lg text-tinta-50 leading-relaxed">
-          Nos vas a encontrar en la Fiesta del Poncho, en la Feria de las Colectividades, en Vendimia
-          y en Expo Chaco. Si no llegás a ninguna, ahora te la mandamos a casa.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2">
-          {['Catamarca', 'Córdoba', 'Mendoza', 'Chaco', 'Neuquén', 'Buenos Aires'].map(p => (
-            <span key={p} className="eyebrow text-tinta-50">{p}</span>
-          ))}
+      {/* Hero: la marca a tamaño real. Lo que hace distinta a esta marca
+          son las ferias, así que las provincias son parte del titular. */}
+      <section className="halo border-b border-tinta/10">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-16 pb-20 sm:pt-24 sm:pb-28 text-center entra">
+          <img
+            src="/marca.png"
+            alt="Cocina Antigua"
+            width="256" height="256"
+            className="w-32 h-32 sm:w-44 sm:h-44 mx-auto"
+          />
+
+          <p className="eyebrow text-higo mt-8">Desde 2016 · Producción familiar</p>
+
+          <h1 className="display mt-5 mx-auto max-w-4xl text-balance">
+            Diez años cocinando en olla{' '}
+            <span className="text-higo">y viajando con la olla</span>
+          </h1>
+
+          <p className="mt-7 mx-auto max-w-xl text-lg text-tinta-50 leading-relaxed text-balance">
+            Nos vas a encontrar en la Fiesta del Poncho, en la Feria de las Colectividades,
+            en Vendimia y en Expo Chaco. Si no llegás a ninguna, ahora te la mandamos a casa.
+          </p>
+
+          <div className="mt-10 flex flex-wrap justify-center gap-3">
+            <a href="#catalogo"
+               className="btn bg-higo text-papel px-7 py-3.5 rounded-xl text-base">
+              Ver los sabores
+            </a>
+            <button onClick={() => setAbierto(true)}
+              className="btn bg-papel border border-tinta/15 px-7 py-3.5 rounded-xl text-base hover:bg-papel-2 hover:border-tinta/30">
+              Mi pedido {unidades > 0 && <span className="cifra">({unidades})</span>}
+            </button>
+          </div>
+
+          <div className="mt-14 pt-8 border-t border-tinta/10 flex flex-wrap justify-center gap-x-8 gap-y-3">
+            {['Catamarca', 'Córdoba', 'Mendoza', 'Chaco', 'Neuquén', 'Buenos Aires'].map(p => (
+              <span key={p} className="eyebrow text-tinta-50">{p}</span>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Catálogo */}
-      <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-20">
-        <h2 className="text-2xl mb-8">Lo que hay ahora</h2>
+      <section id="catalogo" className="mx-auto max-w-5xl px-4 sm:px-6 pt-20 pb-24 scroll-mt-24">
+        <h2 className="display-2">Lo que hay ahora</h2>
+        <p className="text-tinta-50 mt-2 mb-10">Cocinado en tandas chicas. Cuando se termina, se termina.</p>
 
-        <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="escalona grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {catalogo.map(p => {
             const queda = stock[p.id] ?? 0
             const agotado = queda === 0
             return (
-              <article key={p.id} className="flex flex-col">
+              <article key={p.id} className="group flex flex-col">
                 {/* Sin fotos reales: un frasco dibujado con el color del sabor.
                     Cuando el cliente mande fotos, va una imagen acá. */}
-                <div className="aspect-[4/5] rounded-lg flex items-end justify-center overflow-hidden"
+                <div className="aspect-[4/5] rounded-2xl flex items-end justify-center overflow-hidden
+                                transition-transform duration-300 group-hover:-translate-y-1.5"
                      style={{ background: `color-mix(in srgb, ${p.color} 10%, #F8FAFC)` }}>
                   <Frasco color={p.color} agotado={agotado} />
                 </div>
@@ -159,6 +186,12 @@ export default function Tienda() {
           <div>
             <p className="eyebrow text-tinta">Dudas</p>
             <p className="mt-2 leading-relaxed">Escribinos por WhatsApp y te contestamos el mismo día.</p>
+          </div>
+        </div>
+        <div className="border-t border-tinta/10">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 flex flex-wrap items-end justify-between gap-4">
+            <p className="text-xs text-tinta-50">Cocina Antigua · Producción familiar desde 2016</p>
+            <Firma />
           </div>
         </div>
       </footer>

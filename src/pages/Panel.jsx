@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useStore } from '../lib/store'
 import { money, num, rango } from '../lib/format'
-import { Placa, Hoja, Dato, Chip, Barra } from '../components/ui'
+import { Placa, Hoja, Dato, Chip, Barra, Estado } from '../components/ui'
 
 export default function Panel() {
   const { eventos, resultadoEvento, arqueo, jornadas, stockWeb, pedidos, resultadoCanal } = useStore()
@@ -14,19 +14,23 @@ export default function Panel() {
   const pedidosAbiertos = pedidos.filter(p => ['pendiente_pago', 'pagado', 'en_preparacion'].includes(p.estado))
 
   return (
-    <div className="space-y-10">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <Placa sub="Lunes 24 de agosto de 2026">Dos ferias en curso</Placa>
+    <div className="space-y-12">
+      <div className="entra flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <Estado tono="bien" vivo>En curso ahora</Estado>
+          <h1 className="display-2 mt-3">Dos ferias en curso</h1>
+          <p className="text-sm text-tinta-50 mt-2">Lunes 24 de agosto de 2026</p>
+        </div>
         <Link to="/eventos" className="text-sm font-medium text-higo hover:underline underline-offset-4">Ver todos los eventos →</Link>
       </div>
 
       {/* Eventos abiertos: lo que está pasando ahora mismo */}
-      <section className="grid gap-4 md:grid-cols-2">
+      <section className="escalona grid gap-5 md:grid-cols-2">
         {activos.map(e => {
           const r = resultadoEvento(e.id)
           const j = jornadas.find(x => x.eventoId === e.id && x.estado === 'abierta')
           return (
-            <Hoja key={e.id} className="p-5">
+            <Hoja key={e.id} viva className="p-6">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="eyebrow text-tinta-50">{e.provincia}</p>
@@ -40,8 +44,8 @@ export default function Panel() {
                 </Chip>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 mt-5 pt-5 border-t border-tinta/10">
-                <Dato etiqueta="Vendido" valor={money(r.bruto)} />
+              <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-tinta/10">
+                <Dato etiqueta="Vendido" valor={money(r.bruto)} destacado />
                 <Dato etiqueta="Frascos" valor={num(r.unidades)} />
                 <Dato etiqueta="Margen" valor={money(r.margen)} tono={r.margen >= 0 ? 'bien' : 'mal'} />
               </div>
@@ -49,12 +53,12 @@ export default function Panel() {
               <div className="flex flex-wrap gap-2 mt-5">
                 {j && (
                   <Link to={`/venta/${e.id}`}
-                    className="btn bg-higo text-papel px-4 py-2.5 rounded-lg text-sm">
+                    className="btn bg-higo text-papel px-5 py-2.5 rounded-xl text-sm">
                     Abrir punto de venta
                   </Link>
                 )}
                 <Link to={`/eventos/${e.id}`}
-                  className="btn border border-tinta/20 px-4 py-2.5 rounded-lg text-sm hover:bg-papel-2">
+                  className="btn bg-papel border border-tinta/15 px-5 py-2.5 rounded-xl text-sm hover:bg-papel-2 hover:border-tinta/30">
                   Ver el evento
                 </Link>
               </div>
@@ -64,12 +68,12 @@ export default function Panel() {
       </section>
 
       {/* Comparación de canales: la pregunta que el dueño se hace todo el año */}
-      <section>
-        <h2 className="font-display text-lg mb-1">¿Dónde se vende mejor?</h2>
+      <section className="entra">
+        <h2 className="text-xl mb-1">¿Dónde se vende mejor?</h2>
         <p className="text-sm text-tinta-50 mb-4 max-w-prose">
           Ferias y tienda descuentan del mismo depósito, así que se pueden comparar con el mismo criterio.
         </p>
-        <Hoja className="p-5 space-y-5">
+        <Hoja className="p-6 space-y-6">
           {canales.map(c => (
             <div key={c.canal}>
               <div className="flex items-baseline justify-between gap-4 mb-2">
@@ -87,7 +91,7 @@ export default function Panel() {
       </section>
 
       {/* Lo que necesita atención hoy */}
-      <section className="grid gap-4 md:grid-cols-2">
+      <section className="escalona grid gap-5 md:grid-cols-2">
         <Hoja className="p-5">
           <p className="eyebrow text-tinta-50">Caja sin cerrar</p>
           {jornadas.filter(j => j.estado === 'abierta').map(j => {
@@ -102,7 +106,7 @@ export default function Panel() {
           })}
         </Hoja>
 
-        <Hoja className="p-5">
+        <Hoja className="p-6">
           <p className="eyebrow text-tinta-50">Pendiente en la tienda</p>
           <div className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between">

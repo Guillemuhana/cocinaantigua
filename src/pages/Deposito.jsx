@@ -17,7 +17,7 @@ export default function Deposito() {
         es lo único que la web muestra como disponible.
       </p>
 
-      <Hoja className="overflow-x-auto">
+      <Hoja className="entra overflow-x-auto">
         <table className="w-full text-sm min-w-[680px]">
           <thead>
             <tr className="border-b border-tinta/12 text-left">

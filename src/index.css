@@ -96,18 +96,110 @@
     letter-spacing: -0.015em;
   }
 
-  /* Tarjeta: blanco sobre blanco, separada por un borde fino y una sombra
-     apenas perceptible. Sin marcos ni filetes. */
+  /* Tarjeta: blanco sobre blanco, separada por un borde fino y dos capas de
+     sombra — una corta que la despega y otra larga y difusa que le da cuerpo.
+     Una sola sombra se ve plana; dos leen como profundidad real. */
   .hoja {
     background: var(--color-papel);
     border: 1px solid #E2E8F0;
-    box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+    box-shadow:
+      0 1px 2px rgb(15 23 42 / 0.04),
+      0 8px 24px -12px rgb(15 23 42 / 0.10);
+  }
+
+  /* Tarjeta accionable: se levanta apenas al pasar el mouse. El movimiento
+     confirma que se puede tocar, sin animar nada más. */
+  .hoja-viva {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.22s ease;
+  }
+  .hoja-viva:hover {
+    transform: translateY(-3px);
+    border-color: #CBD5E1;
+    box-shadow:
+      0 2px 4px rgb(15 23 42 / 0.05),
+      0 18px 40px -16px rgb(15 23 42 / 0.20);
+  }
+
+  /* --- Escala de títulos -------------------------------------------------
+     Los tamaños crecen con el viewport en un solo paso, sin saltos por
+     breakpoint, y el tracking se cierra a medida que agranda: a 72px el
+     espaciado normal se ve suelto. */
+  .display {
+    font-weight: 700;
+    font-size: clamp(2.25rem, 1.2rem + 4.6vw, 4.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+  }
+  .display-2 {
+    font-weight: 700;
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.032em;
+  }
+
+  /* Cifra protagonista del panel: es el dato que se mira primero. */
+  .cifra-xl {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-size: clamp(1.875rem, 1.4rem + 1.6vw, 2.5rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+
+  /* Punto de estado: chico, al lado del texto que califica. */
+  .punto {
+    display: inline-block;
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 9999px;
+    background: currentColor;
+  }
+  .punto-vivo {
+    box-shadow: 0 0 0 0 currentColor;
+    animation: latir 2.4s ease-out infinite;
+  }
+  @keyframes latir {
+    0%   { box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 55%, transparent); }
+    70%  { box-shadow: 0 0 0 0.5rem transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+
+  /* --- Entrada -----------------------------------------------------------
+     Todo aparece subiendo apenas. En cascada dentro de una grilla, para que
+     la pantalla se arme en vez de aparecer de golpe. */
+  @keyframes entrar {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .entra { animation: entrar 0.55s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+  .escalona > * { animation: entrar 0.55s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .escalona > *:nth-child(1) { animation-delay: 0.03s; }
+  .escalona > *:nth-child(2) { animation-delay: 0.09s; }
+  .escalona > *:nth-child(3) { animation-delay: 0.15s; }
+  .escalona > *:nth-child(4) { animation-delay: 0.21s; }
+  .escalona > *:nth-child(5) { animation-delay: 0.27s; }
+  .escalona > *:nth-child(6) { animation-delay: 0.33s; }
+  .escalona > *:nth-child(n+7) { animation-delay: 0.39s; }
+
+  /* Fondo del hero: un halo apenas visible detrás del título. Da profundidad
+     sin meter una imagen que después haya que reemplazar. */
+  .halo {
+    background:
+      radial-gradient(60rem 32rem at 50% -6rem,
+        color-mix(in srgb, var(--color-higo) 8%, transparent), transparent 70%),
+      radial-gradient(40rem 24rem at 85% 0,
+        color-mix(in srgb, var(--color-damasco) 6%, transparent), transparent 70%);
   }
 
   .btn {
     font-weight: 600;
     letter-spacing: -0.006em;
-    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease,
+                box-shadow 0.15s ease, transform 0.15s ease;
   }
-  .btn:active { transform: translateY(0.5px); }
+  .btn:hover  { box-shadow: 0 6px 16px -8px rgb(37 99 235 / 0.55); }
+  .btn:active { transform: translateY(1px); box-shadow: none; }
 }

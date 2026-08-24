@@ -19,7 +19,7 @@ export default function Pedidos() {
   const lista = [...s.pedidos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <Placa sub="Compras hechas por internet">Pedidos de la tienda</Placa>
 
       <p className="text-sm text-tinta-50 max-w-prose leading-relaxed">
@@ -27,12 +27,12 @@ export default function Pedidos() {
         Mientras tanto queda reservado 48 horas y después se libera solo.
       </p>
 
-      <div className="space-y-3">
+      <div className="escalona space-y-4">
         {lista.map(pd => {
           const sub = pd.items.reduce((a, i) => a + i.cantidad * i.precio, 0)
           const paso = siguiente[pd.estado]
           return (
-            <Hoja key={pd.id} className="p-5">
+            <Hoja key={pd.id} viva className="p-6">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2.5 flex-wrap">

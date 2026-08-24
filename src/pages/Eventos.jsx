@@ -12,15 +12,15 @@ export default function Eventos() {
   const lista = [...eventos].sort((a, b) => orden[a.estado] - orden[b.estado])
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <Placa sub="Cada feria rinde por separado">Eventos</Placa>
 
-      <div className="space-y-3">
+      <div className="escalona space-y-4">
         {lista.map(e => {
           const r = resultadoEvento(e.id)
           const sinVentas = r.tickets === 0
           return (
-            <Hoja key={e.id} className="p-5 hover:border-higo/40 transition-colors">
+            <Hoja key={e.id} viva className="p-6">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2.5 flex-wrap">
