@@ -9,6 +9,11 @@ export const fecha = (iso) =>
 export const hora = (iso) =>
   new Date(iso).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
 
+export const fechaLarga = (d = new Date()) => {
+  const t = d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+  return t.charAt(0).toUpperCase() + t.slice(1)
+}
+
 export const rango = (a, b) => {
   const f = (d) => new Date(d + 'T12:00:00').toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })
   return `${f(a)} — ${f(b)}`

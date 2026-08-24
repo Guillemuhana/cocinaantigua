@@ -20,7 +20,7 @@ export default function Pedidos() {
 
   return (
     <div className="space-y-10">
-      <Placa sub="Compras hechas por internet">Pedidos de la tienda</Placa>
+      <Placa sub="Las compras que entran por la tienda online, en el orden en que llegaron">Pedidos de la web</Placa>
 
       <p className="text-sm text-tinta-50 max-w-prose leading-relaxed">
         El stock no se descuenta cuando alguien compra: se descuenta cuando la plata está acreditada.
@@ -39,7 +39,7 @@ export default function Pedidos() {
                     <span className="cifra text-sm text-tinta-50">#{pd.numero}</span>
                     <Chip tono={tono[pd.estado]}>{etiquetaPedido[pd.estado]}</Chip>
                   </div>
-                  <p className="font-display text-lg mt-1.5">{pd.cliente}</p>
+                  <p className="text-lg font-semibold tracking-tight mt-1.5">{pd.cliente}</p>
                   <p className="text-xs text-tinta-50 mt-0.5">
                     {pd.localidad} · {fecha(pd.fecha)} {hora(pd.fecha)}
                   </p>

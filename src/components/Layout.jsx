@@ -4,9 +4,9 @@ import Firma from './Firma'
 
 const enlaces = [
   { to: '/',         texto: 'Panel',    end: true },
-  { to: '/eventos',  texto: 'Eventos' },
+  { to: '/eventos',  texto: 'Ferias' },
   { to: '/deposito', texto: 'Depósito' },
-  { to: '/pedidos',  texto: 'Pedidos web' },
+  { to: '/pedidos',  texto: 'Pedidos de la web' },
 ]
 
 export default function Layout() {

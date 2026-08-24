@@ -266,13 +266,14 @@ function selectores(s) {
 
     const pagados = s.pedidos.filter(p => ['pagado', 'en_preparacion', 'despachado', 'entregado'].includes(p.estado))
     const brutoWeb = pagados.reduce((a, pd) => a + pd.items.reduce((b, i) => b + i.cantidad * i.precio, 0), 0)
+    const unidadesWeb = pagados.reduce((a, pd) => a + pd.items.reduce((b, i) => b + i.cantidad, 0), 0)
     const envioWeb = pagados.reduce((a, pd) => a + (pd.envio || 0), 0)
     const costoWeb = pagados.reduce((a, pd) =>
       a + pd.items.reduce((b, i) => b + i.cantidad * (producto(i.productoId)?.costo || 0), 0), 0)
 
     return [
-      { canal: 'Ferias', operaciones: ferias.reduce((a, r) => a + r.tickets, 0), bruto: brutoFerias, costo: costoFerias, margenBruto: brutoFerias - costoFerias },
-      { canal: 'Tienda online', operaciones: pagados.length, bruto: brutoWeb, envio: envioWeb, costo: costoWeb, margenBruto: brutoWeb - costoWeb },
+      { canal: 'Ferias', operaciones: ferias.reduce((a, r) => a + r.tickets, 0), unidades: ferias.reduce((a, r) => a + r.unidades, 0), bruto: brutoFerias, costo: costoFerias, margenBruto: brutoFerias - costoFerias },
+      { canal: 'Tienda online', operaciones: pagados.length, unidades: unidadesWeb, bruto: brutoWeb, envio: envioWeb, costo: costoWeb, margenBruto: brutoWeb - costoWeb },
     ]
   }
 
