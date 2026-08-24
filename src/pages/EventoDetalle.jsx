@@ -20,13 +20,13 @@ export default function EventoDetalle() {
   return (
     <div className="space-y-8">
       <div>
-        <Link to="/eventos" className="eyebrow text-tinta-50 hover:text-higo">← Eventos</Link>
+        <Link to="/eventos" className="text-sm font-medium text-tinta-50 hover:text-higo">← Eventos</Link>
         <div className="flex flex-wrap items-end justify-between gap-4 mt-3">
           <div>
             <Placa sub={`${e.localidad}, ${e.provincia} · ${rango(e.desde, e.hasta)}`}>{e.nombre}</Placa>
           </div>
           {jornadaAbierta && (
-            <Link to={`/venta/${e.id}`} className="btn bg-damasco text-tinta px-4 py-2.5 rounded-sm text-sm">
+            <Link to={`/venta/${e.id}`} className="btn bg-higo text-papel px-4 py-2.5 rounded-lg text-sm">
               Abrir punto de venta
             </Link>
           )}
@@ -43,7 +43,7 @@ export default function EventoDetalle() {
       <div className="flex gap-1 flex-wrap">
         {SOLAPAS.map(t => (
           <button key={t} onClick={() => setSolapa(t)}
-            className={`eyebrow px-3 py-2 rounded-sm transition-colors ${
+            className={`eyebrow px-3 py-2 rounded-lg transition-colors ${
               solapa === t ? 'bg-higo text-papel' : 'text-tinta-50 hover:text-tinta hover:bg-papel-2'}`}>
             {t}
           </button>
@@ -197,7 +197,7 @@ function Caja({ s, id }) {
                         type="number" inputMode="numeric" value={contado}
                         onChange={ev => setContado(ev.target.value)}
                         placeholder="0"
-                        className="cifra w-full px-3 py-2.5 rounded-sm border border-tinta/20 bg-papel focus:border-higo outline-none"
+                        className="cifra w-full px-3 py-2.5 rounded-lg border border-tinta/20 bg-papel focus:border-higo outline-none"
                       />
                     </label>
                     <Boton

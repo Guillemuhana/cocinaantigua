@@ -17,7 +17,7 @@ export default function Panel() {
     <div className="space-y-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <Placa sub="Lunes 24 de agosto de 2026">Dos ferias en curso</Placa>
-        <Link to="/eventos" className="eyebrow text-higo hover:underline underline-offset-4">Ver todos los eventos →</Link>
+        <Link to="/eventos" className="text-sm font-medium text-higo hover:underline underline-offset-4">Ver todos los eventos →</Link>
       </div>
 
       {/* Eventos abiertos: lo que está pasando ahora mismo */}
@@ -49,12 +49,12 @@ export default function Panel() {
               <div className="flex flex-wrap gap-2 mt-5">
                 {j && (
                   <Link to={`/venta/${e.id}`}
-                    className="btn bg-damasco text-tinta px-4 py-2.5 rounded-sm text-sm">
+                    className="btn bg-higo text-papel px-4 py-2.5 rounded-lg text-sm">
                     Abrir punto de venta
                   </Link>
                 )}
                 <Link to={`/eventos/${e.id}`}
-                  className="btn border border-tinta/20 px-4 py-2.5 rounded-sm text-sm hover:bg-papel-2">
+                  className="btn border border-tinta/20 px-4 py-2.5 rounded-lg text-sm hover:bg-papel-2">
                   Ver el evento
                 </Link>
               </div>

@@ -50,14 +50,17 @@ export default function Tienda() {
     <div className="min-h-dvh bg-papel">
       <header className="border-b border-tinta/12 sticky top-0 bg-papel/90 backdrop-blur z-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 h-16 flex items-center gap-4">
-          <div>
-            <p className="font-display italic text-xl text-higo leading-none">Cocina Antigua</p>
-            <p className="eyebrow text-tinta-50 mt-1">Mermeladas de olla</p>
+          <div className="flex items-center gap-3">
+            <img src="/marca.png" alt="" width="36" height="36" className="w-9 h-9 shrink-0" />
+            <div>
+              <p className="text-lg font-semibold tracking-tight leading-none">Cocina Antigua</p>
+              <p className="text-xs text-tinta-50 mt-1">Mermeladas de olla</p>
+            </div>
           </div>
           <div className="ml-auto flex items-center gap-3">
-            <Link to="/" className="eyebrow text-tinta-50 hover:text-higo hidden sm:inline">Volver al sistema</Link>
+            <Link to="/" className="text-sm font-medium text-tinta-50 hover:text-higo hidden sm:inline">Volver al sistema</Link>
             <button onClick={() => setAbierto(true)}
-              className="btn bg-higo text-papel px-4 py-2.5 rounded-sm text-sm">
+              className="btn bg-higo text-papel px-4 py-2.5 rounded-lg text-sm">
               Carrito {unidades > 0 && <span className="cifra">({unidades})</span>}
             </button>
           </div>
@@ -66,13 +69,13 @@ export default function Tienda() {
 
       {confirmado && (
         <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-6">
-          <div className="border border-laurel/40 bg-laurel/10 px-5 py-4 rounded-sm">
+          <div className="border border-laurel/40 bg-laurel/10 px-5 py-4 rounded-lg">
             <p className="font-display text-lg text-laurel">Listo, {confirmado.nombre}</p>
             <p className="text-sm text-tinta-50 mt-1">
               Tu pedido por {money(confirmado.total)} quedó reservado. Te mandamos los datos para
               transferir por mail — tenés 48 horas antes de que se libere el stock.
             </p>
-            <Link to="/pedidos" className="eyebrow text-higo mt-3 inline-block hover:underline underline-offset-4">
+            <Link to="/pedidos" className="text-sm font-medium text-higo mt-3 inline-block hover:underline underline-offset-4">
               Verlo entrar en la bandeja de pedidos →
             </Link>
           </div>
@@ -81,10 +84,10 @@ export default function Tienda() {
 
       {/* Hero: lo que hace distinta a esta marca son las ferias */}
       <section className="mx-auto max-w-5xl px-4 sm:px-6 pt-14 pb-12">
-        <p className="eyebrow text-damasco">Desde 2016 · Producción familiar</p>
+        <p className="eyebrow text-higo">Desde 2016 · Producción familiar</p>
         <h1 className="font-display text-4xl sm:text-6xl leading-[0.95] mt-4 max-w-2xl">
           Diez años cocinando en olla<br />
-          <em className="text-higo">y viajando con la olla</em>
+          <span className="text-higo">y viajando con la olla</span>
         </h1>
         <p className="mt-6 max-w-lg text-tinta-50 leading-relaxed">
           Nos vas a encontrar en la Fiesta del Poncho, en la Feria de las Colectividades, en Vendimia
@@ -99,7 +102,7 @@ export default function Tienda() {
 
       {/* Catálogo */}
       <section className="mx-auto max-w-5xl px-4 sm:px-6 pb-20">
-        <h2 className="placa font-display text-2xl text-higo mb-8">Lo que hay ahora</h2>
+        <h2 className="text-2xl mb-8">Lo que hay ahora</h2>
 
         <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {catalogo.map(p => {
@@ -109,8 +112,8 @@ export default function Tienda() {
               <article key={p.id} className="flex flex-col">
                 {/* Sin fotos reales: un frasco dibujado con el color del sabor.
                     Cuando el cliente mande fotos, va una imagen acá. */}
-                <div className="aspect-[4/5] rounded-sm flex items-end justify-center overflow-hidden"
-                     style={{ background: `color-mix(in srgb, ${p.color} 12%, #FBF9F3)` }}>
+                <div className="aspect-[4/5] rounded-lg flex items-end justify-center overflow-hidden"
+                     style={{ background: `color-mix(in srgb, ${p.color} 10%, #F8FAFC)` }}>
                   <Frasco color={p.color} agotado={agotado} />
                 </div>
 
@@ -128,7 +131,7 @@ export default function Tienda() {
                     <button
                       disabled={agotado}
                       onClick={() => s.dispatch({ type: 'CARRITO_AGREGAR', payload: { productoId: p.id, cantidad: 1, precio: p.precioWeb } })}
-                      className="btn flex-1 border border-tinta/25 py-2.5 rounded-sm text-sm hover:bg-papel-2
+                      className="btn flex-1 border border-tinta/25 py-2.5 rounded-lg text-sm hover:bg-papel-2
                                  disabled:opacity-35 disabled:cursor-not-allowed">
                       {agotado ? 'Sin stock' : 'Agregar'}
                     </button>
@@ -169,7 +172,7 @@ export default function Tienda() {
               <span className="font-display text-lg">
                 {paso === 'catalogo' ? 'Tu pedido' : 'Tus datos'}
               </span>
-              <button onClick={() => setAbierto(false)} className="eyebrow text-tinta-50 hover:text-higo">Cerrar</button>
+              <button onClick={() => setAbierto(false)} className="text-sm font-medium text-tinta-50 hover:text-higo">Cerrar</button>
             </div>
 
             <div className="flex-1 overflow-y-auto">
@@ -191,11 +194,11 @@ export default function Tienda() {
                         <div className="flex items-center gap-1.5">
                           <button onClick={() => s.dispatch({ type: 'CARRITO_CANTIDAD', payload: { productoId: i.productoId, cantidad: i.cantidad - 1 } })}
                             aria-label="Quitar uno"
-                            className="w-8 h-8 rounded-sm border border-tinta/20 hover:border-higo">−</button>
+                            className="w-8 h-8 rounded-lg border border-tinta/20 hover:border-higo">−</button>
                           <span className="cifra w-6 text-center text-sm">{i.cantidad}</span>
                           <button onClick={() => s.dispatch({ type: 'CARRITO_CANTIDAD', payload: { productoId: i.productoId, cantidad: i.cantidad + 1 } })}
                             aria-label="Agregar uno"
-                            className="w-8 h-8 rounded-sm border border-tinta/20 hover:border-higo">+</button>
+                            className="w-8 h-8 rounded-lg border border-tinta/20 hover:border-higo">+</button>
                         </div>
                       </li>
                     )
@@ -217,7 +220,7 @@ export default function Tienda() {
                         const gratis = m.gratisDesde && subtotal >= m.gratisDesde
                         return (
                           <label key={m.id}
-                            className={`flex items-start gap-3 p-3 rounded-sm border cursor-pointer transition-colors ${
+                            className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
                               datos.envioId === m.id ? 'border-higo bg-higo/5' : 'border-tinta/15 hover:border-tinta/30'}`}>
                             <input type="radio" name="envio" checked={datos.envioId === m.id}
                                    onChange={() => setDatos({ ...datos, envioId: m.id })} className="mt-1" />
@@ -255,18 +258,18 @@ export default function Tienda() {
 
                 {paso === 'catalogo' ? (
                   <button onClick={() => setPaso('datos')}
-                    className="btn w-full bg-higo text-papel py-3.5 rounded-sm font-semibold">
+                    className="btn w-full bg-higo text-papel py-3.5 rounded-lg font-semibold">
                     Continuar
                   </button>
                 ) : (
                   <div className="flex gap-2">
                     <button onClick={() => setPaso('catalogo')}
-                      className="btn border border-tinta/20 px-4 py-3.5 rounded-sm text-sm hover:bg-papel-2">
+                      className="btn border border-tinta/20 px-4 py-3.5 rounded-lg text-sm hover:bg-papel-2">
                       Atrás
                     </button>
                     <button onClick={confirmarPedido}
                       disabled={!datos.nombre || !datos.email || !datos.localidad}
-                      className="btn flex-1 bg-higo text-papel py-3.5 rounded-sm font-semibold disabled:opacity-35">
+                      className="btn flex-1 bg-higo text-papel py-3.5 rounded-lg font-semibold disabled:opacity-35">
                       Confirmar el pedido
                     </button>
                   </div>
@@ -285,7 +288,7 @@ function Campo({ etiqueta, valor, onChange, tipo = 'text' }) {
     <label className="block">
       <span className="eyebrow text-tinta-50 block mb-1.5">{etiqueta}</span>
       <input type={tipo} value={valor} onChange={e => onChange(e.target.value)}
-        className="w-full px-3 py-2.5 rounded-sm border border-tinta/20 bg-[#FBF9F3] focus:border-higo outline-none text-sm" />
+        className="w-full px-3 py-2.5 rounded-lg border border-tinta/20 bg-papel-2 focus:border-higo outline-none text-sm" />
     </label>
   )
 }
@@ -296,9 +299,9 @@ function Frasco({ color, agotado }) {
     <svg viewBox="0 0 120 150" className={`w-28 ${agotado ? 'opacity-30' : ''}`} aria-hidden="true">
       <rect x="42" y="8" width="36" height="10" rx="2" fill={color} opacity="0.85" />
       <path d="M34 22 h52 a6 6 0 0 1 6 6 v104 a8 8 0 0 1 -8 8 h-48 a8 8 0 0 1 -8 -8 v-104 a6 6 0 0 1 6 -6 z"
-            fill="#FBF9F3" stroke={color} strokeWidth="2" opacity="0.9" />
+            fill="#FFFFFF" stroke={color} strokeWidth="2" opacity="0.9" />
       <path d="M34 48 h52 v84 a8 8 0 0 1 -8 8 h-36 a8 8 0 0 1 -8 -8 z" fill={color} opacity="0.75" />
-      <rect x="44" y="70" width="32" height="26" rx="1" fill="#FBF9F3" opacity="0.92" />
+      <rect x="44" y="70" width="32" height="26" rx="1" fill="#FFFFFF" opacity="0.92" />
       <line x1="49" y1="79" x2="71" y2="79" stroke={color} strokeWidth="1.5" opacity="0.6" />
       <line x1="49" y1="86" x2="65" y2="86" stroke={color} strokeWidth="1.5" opacity="0.4" />
     </svg>

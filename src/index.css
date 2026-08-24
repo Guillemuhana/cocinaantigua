@@ -3,35 +3,44 @@
 /* ===========================================================================
    Sistema visual — Cocina Antigua
 
-   La paleta sale del producto: higo, damasco, membrillo. El fondo es el papel
-   de las etiquetas viejas, no un gris de dashboard.
+   Interfaz de trabajo: blanco, grises neutros y un único azul de acento.
+   La jerarquía la dan el peso tipográfico y el espacio, no el color ni el
+   ornamento. El color queda reservado para los estados que hay que mirar:
+   verde cierra bien, rojo falta algo, ámbar avisa.
 
    Dos superficies distintas a propósito:
-     · Administración → papel claro, para leer números adentro
-     · Punto de venta  → pizarra oscura, como el cartel de precios del puesto.
-       En una feria al sol una pantalla clara no se ve, y además el vendedor ya
-       está acostumbrado a leer los precios de un pizarrón.
+     · Administración → clara, para leer números adentro
+     · Punto de venta  → oscura, alto contraste y objetivos grandes, que se
+       usa de pie y apurado en el puesto
    =========================================================================== */
 
 @theme {
-  --color-papel:      #F2EFE4;   /* papel de etiqueta */
-  --color-papel-2:    #E7E2D2;   /* papel con sombra */
-  --color-tinta:      #2B1A2B;   /* tinta de imprenta, casi negro violáceo */
-  --color-tinta-50:   #6A5568;
+  /* --- Superficies claras --- */
+  --color-papel:      #FFFFFF;   /* fondo y superficie principal */
+  --color-papel-2:    #F1F5F9;   /* superficie hundida / hover */
+  --color-tinta:      #0F172A;   /* texto principal */
+  --color-tinta-50:   #64748B;   /* texto secundario — 4.8:1 sobre blanco */
 
-  --color-higo:       #6B2D4E;   /* mermelada de higo — color de marca */
-  --color-higo-claro: #8E4468;
-  --color-damasco:    #D98324;   /* damasco — acento de acción */
-  --color-membrillo:  #A33B1F;   /* alerta / faltante */
-  --color-laurel:     #4A6B4F;   /* confirmación */
+  /* --- Acento único --- */
+  --color-higo:       #2563EB;   /* azul de marca: acciones y estado activo */
+  --color-higo-claro: #1D4ED8;   /* azul al pasar el mouse */
 
-  --color-pizarra:    #1C2620;   /* verde pizarrón */
-  --color-pizarra-2:  #27332B;
-  --color-tiza:       #EFEDE2;
+  /* --- Estados --- */
+  --color-damasco:    #B45309;   /* aviso / atención */
+  --color-membrillo:  #DC2626;   /* falta / error */
+  --color-laurel:     #059669;   /* confirmado / correcto */
 
-  --font-display: "Bodoni Moda", Georgia, serif;
-  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  /* --- Punto de venta (superficie oscura) --- */
+  --color-pizarra:    #0F172A;
+  --color-pizarra-2:  #1E293B;
+  --color-tiza:       #F8FAFC;
+  --color-brillo:     #60A5FA;   /* acento sobre oscuro */
+  --color-alerta:     #FBBF24;   /* aviso sobre oscuro */
+
+  /* Una sola familia. La distinción la hacen peso y tamaño. */
+  --font-display: "Inter", system-ui, -apple-system, sans-serif;
+  --font-sans:    "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono:    "Inter", system-ui, sans-serif;
 }
 
 @layer base {
@@ -41,13 +50,20 @@
     background-color: var(--color-papel);
     color: var(--color-tinta);
     font-family: var(--font-sans);
-    font-feature-settings: "tnum" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Los títulos se distinguen por peso y tracking cerrado, no por otra fuente. */
+  h1, h2, h3 {
+    font-weight: 600;
+    letter-spacing: -0.021em;
   }
 
   /* Foco visible siempre: se usa con guantes y apurado. */
   :focus-visible {
-    outline: 2px solid var(--color-damasco);
+    outline: 2px solid var(--color-higo);
     outline-offset: 2px;
+    border-radius: 2px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -59,51 +75,39 @@
 }
 
 @layer components {
-  /* --- Elemento firma: la placa de etiqueta de frasco ---------------------
-     Doble filete y versalitas, como las etiquetas de dulce de toda la vida.
-     Se usa una sola vez por pantalla, para el título. */
-  .placa {
-    position: relative;
-    display: inline-block;
-    padding: 0.5rem 1.75rem 0.6rem;
-    border-top: 3px double currentColor;
-    border-bottom: 3px double currentColor;
+  /* Texto de título: hereda de h1/h2/h3, pero también sirve en <p> y <span>. */
+  .font-display {
+    font-weight: 600;
+    letter-spacing: -0.021em;
   }
-  .placa::before,
-  .placa::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 5px; height: 5px;
-    transform: translateY(-50%) rotate(45deg);
-    background: currentColor;
-  }
-  .placa::before { left: 6px; }
-  .placa::after  { right: 6px; }
 
+  /* Rótulo de campo: mayúsculas chicas sobre el dato que etiqueta. */
   .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    letter-spacing: 0.16em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
   }
 
+  /* Números que se comparan en columna: ancho fijo para que alineen. */
   .cifra {
-    font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.015em;
   }
 
-  /* Superficie de papel con borde fino, no card con sombra difusa */
+  /* Tarjeta: blanco sobre blanco, separada por un borde fino y una sombra
+     apenas perceptible. Sin marcos ni filetes. */
   .hoja {
-    background: #FBF9F3;
-    border: 1px solid color-mix(in srgb, var(--color-tinta) 14%, transparent);
+    background: var(--color-papel);
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
   }
 
   .btn {
     font-weight: 600;
-    letter-spacing: 0.01em;
-    transition: transform 0.08s ease, background-color 0.15s ease;
+    letter-spacing: -0.006em;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
   }
-  .btn:active { transform: translateY(1px); }
+  .btn:active { transform: translateY(0.5px); }
 }

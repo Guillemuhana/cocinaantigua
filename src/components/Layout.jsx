@@ -14,13 +14,16 @@ export default function Layout() {
   const pendientes = pedidos.filter(p => ['pendiente_pago', 'pagado', 'en_preparacion'].includes(p.estado)).length
 
   return (
-    <div className="min-h-dvh flex flex-col">
-      <header className="border-b border-tinta/12 bg-papel/85 backdrop-blur sticky top-0 z-20">
+    <div className="min-h-dvh flex flex-col bg-papel-2/40">
+      <header className="border-b border-tinta/10 bg-papel/80 backdrop-blur-md sticky top-0 z-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex items-center gap-6 h-16">
-            <Link to="/" className="shrink-0 leading-none">
-              <span className="font-display italic text-xl text-higo">Cocina Antigua</span>
-              <span className="eyebrow block text-tinta-50 mt-0.5">Gestión de ferias</span>
+            <Link to="/" className="shrink-0 flex items-center gap-2.5 leading-none">
+              <img src="/marca.png" alt="Cocina Antigua" width="32" height="32" className="w-8 h-8 shrink-0" />
+              <span className="hidden sm:block">
+                <span className="block text-[15px] font-semibold tracking-tight">Cocina Antigua</span>
+                <span className="block text-xs text-tinta-50 mt-0.5">Gestión de ferias</span>
+              </span>
             </Link>
 
             <nav className="flex items-center gap-1 overflow-x-auto ml-auto">
@@ -30,23 +33,25 @@ export default function Layout() {
                   to={l.to}
                   end={l.end}
                   className={({ isActive }) =>
-                    `eyebrow whitespace-nowrap px-3 py-2 rounded-sm transition-colors ${
+                    `text-sm font-medium whitespace-nowrap px-3 py-2 rounded-lg transition-colors ${
                       isActive ? 'bg-higo text-papel' : 'text-tinta-50 hover:text-tinta hover:bg-papel-2'
                     }`
                   }
                 >
                   {l.texto}
                   {l.to === '/pedidos' && pendientes > 0 && (
-                    <span className="ml-1.5 inline-block px-1.5 rounded-full bg-damasco text-tinta">{pendientes}</span>
+                    <span className="ml-1.5 inline-block min-w-5 text-center text-xs font-semibold px-1.5 py-0.5 rounded-full bg-membrillo text-papel">
+                      {pendientes}
+                    </span>
                   )}
                 </NavLink>
               ))}
               <Link
                 to="/tienda"
-                className={`eyebrow whitespace-nowrap px-3 py-2 rounded-sm border transition-colors ${
+                className={`text-sm font-medium whitespace-nowrap px-3 py-2 rounded-lg border transition-colors ${
                   pathname.startsWith('/tienda')
                     ? 'bg-tinta text-papel border-tinta'
-                    : 'border-tinta/25 text-tinta hover:bg-papel-2'
+                    : 'bg-papel border-tinta/15 text-tinta hover:bg-papel-2'
                 }`}
               >
                 Ver la tienda ↗
@@ -60,10 +65,10 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      <footer className="border-t border-tinta/12 mt-8">
+      <footer className="border-t border-tinta/10 mt-8 bg-papel">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-5 flex flex-wrap gap-3 justify-between">
-          <p className="eyebrow text-tinta-50">Demostración con datos de ejemplo</p>
-          <p className="eyebrow text-tinta-50">Ninguna operación se guarda al recargar</p>
+          <p className="text-xs text-tinta-50">Demostración con datos de ejemplo</p>
+          <p className="text-xs text-tinta-50">Ninguna operación se guarda al recargar</p>
         </div>
       </footer>
     </div>
