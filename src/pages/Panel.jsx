@@ -80,14 +80,14 @@ export default function Panel() {
   const frascosPorVenta = totalVentas > 0 ? totalFrascos / totalVentas : 0
 
   return (
-    <div className="space-y-14">
+    <div className="space-y-10 sm:space-y-14">
 
       {/* 1 · Cómo viene el negocio, en tres números */}
       <section className="entra">
         <p className="text-sm text-tinta-50">{fechaLarga()}</p>
         <h1 className="display-2 mt-1.5">Así viene el año</h1>
 
-        <Hoja className="mt-6 p-6 sm:p-8 grid gap-8 sm:grid-cols-3">
+        <Hoja className="mt-5 sm:mt-6 p-5 sm:p-8 grid gap-6 sm:gap-8 sm:grid-cols-3">
           <Dato etiqueta="Vendido" valor={money(totalVendido)} destacado
                 detalle="Ferias, tienda online y revendedores" />
           <Dato etiqueta="Frascos vendidos" valor={num(totalFrascos)} destacado
@@ -150,7 +150,7 @@ export default function Panel() {
             const r = resultadoEvento(e.id)
             const j = jornadas.find(x => x.eventoId === e.id && x.estado === 'abierta')
             return (
-              <Hoja key={e.id} viva className="p-6">
+              <Hoja key={e.id} viva className="p-5 sm:p-6">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <Estado tono="bien" vivo>{e.provincia}</Estado>
@@ -197,15 +197,21 @@ export default function Panel() {
 
       {/* 4 · Los números para pensar */}
       <section className="space-y-6">
-        <div className="entra">
-          <h2 className="display-2">Los números del año</h2>
-          <p className="text-tinta-50 mt-2">
-            Todo lo de abajo suma las ferias, la tienda online y los revendedores.
-          </p>
+        <div className="entra flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h2 className="display-2">Los números del año</h2>
+            <p className="text-tinta-50 mt-2">
+              Todo lo de abajo suma las ferias, la tienda online y los revendedores.
+            </p>
+          </div>
+          <Link to="/reportes/anio"
+            className="btn bg-papel border border-tinta/15 px-5 py-2.5 rounded-xl text-sm hover:bg-papel-2 hover:border-tinta/30 shrink-0">
+            Descargar o imprimir ↓
+          </Link>
         </div>
 
         {/* Tres promedios que ordenan el resto */}
-        <Hoja className="entra p-6 sm:p-8 grid gap-8 sm:grid-cols-3">
+        <Hoja className="entra p-5 sm:p-8 grid gap-6 sm:gap-8 sm:grid-cols-3">
           <Dato etiqueta="Venta promedio" valor={money(ticketPromedio)}
                 detalle="lo que gasta cada cliente" />
           <Dato etiqueta="Frascos por venta" valor={frascosPorVenta.toFixed(1).replace('.', ',')}
@@ -217,7 +223,7 @@ export default function Panel() {
 
         <div className="escalona grid gap-5 lg:grid-cols-2">
           {/* Ranking de sabores: la pregunta antes de cada tanda */}
-          <Hoja className="p-6 sm:p-7">
+          <Hoja className="p-5 sm:p-7">
             <h3 className="text-lg">Los sabores que más se venden</h3>
             <p className="text-sm text-tinta-50 mt-1.5 mb-6">
               En frascos, sumando feria y web. Es lo que conviene tener cocinado.
@@ -234,7 +240,7 @@ export default function Panel() {
           </Hoja>
 
           {/* Comparación entre ferias */}
-          <Hoja className="p-6 sm:p-7">
+          <Hoja className="p-5 sm:p-7">
             <h3 className="text-lg">Lo que rindió cada feria</h3>
             <p className="text-sm text-tinta-50 mt-1.5 mb-6">
               Ordenadas por lo vendido. La ganancia ya descuenta sueldos y canon.
@@ -252,7 +258,7 @@ export default function Panel() {
           </Hoja>
 
           {/* Canales: tres series, así que van con color propio y nombre al lado */}
-          <Hoja className="p-6 sm:p-7">
+          <Hoja className="p-5 sm:p-7">
             <h3 className="text-lg">¿Por dónde entra la plata?</h3>
             <p className="text-sm text-tinta-50 mt-1.5 mb-6">
               Los tres canales sacan frascos del mismo depósito, así que se comparan con la
@@ -272,7 +278,7 @@ export default function Panel() {
           </Hoja>
 
           {/* Medios de pago */}
-          <Hoja className="p-6 sm:p-7">
+          <Hoja className="p-5 sm:p-7">
             <h3 className="text-lg">Cómo paga la gente en la feria</h3>
             <p className="text-sm text-tinta-50 mt-1.5 mb-6">
               Cuanto más efectivo, menos comisión — pero más plata que contar al cierre.

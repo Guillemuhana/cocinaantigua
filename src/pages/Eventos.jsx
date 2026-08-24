@@ -42,7 +42,7 @@ export default function Eventos() {
                 const sinVentas = r.tickets === 0
 
                 return (
-                  <Hoja key={e.id} viva className="p-6">
+                  <Hoja key={e.id} viva className="p-5 sm:p-6">
                     <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
                       <div className="min-w-0">
                         <Estado tono={tonoEstado[e.estado]} vivo={e.estado === 'abierto'}>

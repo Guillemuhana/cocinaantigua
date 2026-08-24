@@ -24,7 +24,7 @@ export default function Deposito() {
       </Placa>
 
       {/* La regla, explicada una vez y en un solo lugar */}
-      <Hoja className="entra p-6 sm:p-7">
+      <Hoja className="entra p-5 sm:p-7">
         <h2 className="text-lg">Por qué la web no vende todo lo que hay</h2>
         <p className="text-sm text-tinta-50 mt-2.5 leading-relaxed max-w-prose">
           Antes de publicar un frasco en la tienda hay que restarle tres cosas: lo que ya está
@@ -45,7 +45,7 @@ export default function Deposito() {
           const agotado = f.disponible === 0
 
           return (
-            <Hoja key={f.producto.id} className="p-6">
+            <Hoja key={f.producto.id} className="p-5 sm:p-6">
               <div className="flex flex-wrap items-center gap-2.5 mb-5">
                 <span
                   className="inline-block w-3 h-3 rounded-full shrink-0"

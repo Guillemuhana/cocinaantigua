@@ -209,3 +209,47 @@
   .btn:hover  { box-shadow: 0 6px 16px -8px rgb(37 99 235 / 0.55); }
   .btn:active { transform: translateY(1px); box-shadow: none; }
 }
+
+/* ===========================================================================
+   Impresión.
+
+   El papel es otro medio, no la pantalla en blanco y negro: no hay hover, no
+   hay scroll y la tinta cuesta plata. Se saca todo lo que no es el dato —
+   barras de navegación, botones, sombras, fondos de color — y se deja el
+   documento solo. Desde el mismo diálogo de impresión el navegador ofrece
+   "Guardar como PDF", así que esto también resuelve el PDF sin sumar una
+   librería de 300 kB.
+   =========================================================================== */
+@media print {
+  @page { margin: 14mm; }
+
+  html, body { background: #fff !important; }
+
+  /* Nada de lo que sirve para navegar tiene sentido en una hoja */
+  .no-imprimir { display: none !important; }
+
+  /* La sombra y el borde redondeado se imprimen como una mancha gris */
+  .hoja, .hoja-viva {
+    box-shadow: none !important;
+    border: 1px solid #CBD5E1 !important;
+    border-radius: 0 !important;
+  }
+
+  /* La animación de entrada dejaría elementos a medio aparecer en el papel */
+  .entra, .escalona > * { animation: none !important; opacity: 1 !important; transform: none !important; }
+
+  /* Que no se parta una tabla ni una tarjeta entre dos hojas */
+  table { break-inside: auto; }
+  tr, .evitar-corte { break-inside: avoid; }
+  thead { display: table-header-group; }
+  h1, h2, h3 { break-after: avoid; }
+
+  /* Los enlaces en papel son texto: el subrayado azul confunde */
+  a { color: inherit !important; text-decoration: none !important; }
+
+  .hoja-impresa {
+    max-width: none !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+}

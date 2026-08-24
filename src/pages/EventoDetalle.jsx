@@ -40,7 +40,7 @@ export default function EventoDetalle() {
         <Dato etiqueta="Ganancia de la feria" valor={money(r.margen)} tono={r.margen >= 0 ? 'bien' : 'mal'} />
       </div>
 
-      <div className="flex gap-1 flex-wrap">
+      <div className="flex gap-1 flex-wrap items-center">
         {SOLAPAS.map(t => (
           <button key={t} onClick={() => setSolapa(t)}
             className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors ${
@@ -48,6 +48,10 @@ export default function EventoDetalle() {
             {t}
           </button>
         ))}
+        <Link to={`/reportes/feria/${id}`}
+          className="btn ml-auto bg-papel border border-tinta/15 px-4 py-2 rounded-xl text-sm hover:bg-papel-2 hover:border-tinta/30">
+          Cierre de feria ↓
+        </Link>
       </div>
 
       {solapa === 'Mercadería' && <Stock s={s} id={id} />}

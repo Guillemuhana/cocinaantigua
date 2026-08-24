@@ -82,19 +82,19 @@ export default function Tienda() {
       <BarraDemo lado="tienda" />
 
       <header className="border-b border-tinta/12 sticky top-0 bg-papel/90 backdrop-blur z-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 h-24 flex items-center gap-4">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 h-16 sm:h-24 flex items-center gap-3 sm:gap-4">
           <div className="flex items-center gap-3.5">
-            <img src="/marca.png" alt="" width="64" height="64" className="w-14 h-14 sm:w-16 sm:h-16 shrink-0" />
+            <img src="/marca.png" alt="" width="64" height="64" className="w-10 h-10 sm:w-16 sm:h-16 shrink-0" />
             <div>
-              <p className="text-xl font-bold tracking-tight leading-none">Cocina Antigua</p>
-              <p className="text-xs text-tinta-50 mt-1.5">
+              <p className="text-base sm:text-xl font-bold tracking-tight leading-none">Cocina Antigua</p>
+              <p className="hidden sm:block text-xs text-tinta-50 mt-1.5">
                 {mayorista ? 'Venta a revendedores' : 'Mermeladas de olla'}
               </p>
             </div>
           </div>
           <div className="ml-auto flex items-center gap-3">
             <button onClick={() => setAbierto(true)}
-              className="btn bg-higo text-papel px-5 py-2.5 rounded-xl text-sm">
+              className="btn bg-higo text-papel px-4 sm:px-5 py-2.5 rounded-xl text-sm whitespace-nowrap">
               Carrito {unidades > 0 && <span className="cifra">({unidades})</span>}
             </button>
           </div>
@@ -142,9 +142,9 @@ export default function Tienda() {
 
       {/* Hero */}
       <section className="halo border-b border-tinta/10">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-16 pb-20 sm:pt-24 sm:pb-28 text-center entra">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 pt-10 pb-14 sm:pt-24 sm:pb-28 text-center entra">
           <img src="/marca.png" alt="Cocina Antigua" width="256" height="256"
-               className="w-32 h-32 sm:w-44 sm:h-44 mx-auto" />
+               className="w-24 h-24 sm:w-44 sm:h-44 mx-auto" />
 
           {mayorista ? (
             <>
@@ -158,7 +158,7 @@ export default function Tienda() {
                 Sin exclusividad, sin contrato y con reposición en el mes.
               </p>
 
-              <dl className="mt-12 grid gap-6 sm:grid-cols-4 max-w-3xl mx-auto text-left sm:text-center">
+              <dl className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-4 max-w-3xl mx-auto text-center">
                 <Condicion valor={`${Math.round(cond.descuento * 100)}%`} texto="menos que el precio público" />
                 <Condicion valor={num(cond.minimoFrascos)} texto="frascos de mínimo por pedido" />
                 <Condicion valor={`x${cond.bulto}`} texto="frascos por bulto, un solo sabor" />
@@ -200,7 +200,7 @@ export default function Tienda() {
       </section>
 
       {/* Catálogo */}
-      <section id="catalogo" className="mx-auto max-w-5xl px-4 sm:px-6 pt-20 pb-24 scroll-mt-24">
+      <section id="catalogo" className="mx-auto max-w-5xl px-4 sm:px-6 pt-12 sm:pt-20 pb-20 sm:pb-24 scroll-mt-20">
         <h2 className="display-2">{mayorista ? 'Lista de precios' : 'Lo que hay ahora'}</h2>
         <p className="text-tinta-50 mt-2 mb-10">
           {mayorista
@@ -335,7 +335,7 @@ export default function Tienda() {
       {abierto && (
         <div className="fixed inset-0 z-30 flex justify-end" role="dialog" aria-modal="true">
           <div className="absolute inset-0 bg-tinta/40" onClick={() => setAbierto(false)} />
-          <div className="relative w-full sm:max-w-md bg-papel border-l border-tinta/15 flex flex-col">
+          <div className="relative w-full sm:max-w-md bg-papel border-l border-tinta/15 flex flex-col max-h-dvh">
             <div className="px-5 py-4 border-b border-tinta/12 flex items-center justify-between">
               <span className="text-lg font-semibold tracking-tight">
                 {paso === 'catalogo' ? 'Tu pedido' : 'Tus datos'}

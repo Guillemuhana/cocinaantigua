@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useStore } from '../lib/store'
 import { money, num, fecha, hora, etiquetaPedido } from '../lib/format'
 import { Placa, Hoja, Chip, Boton } from '../components/ui'
@@ -55,7 +56,7 @@ export default function Pedidos() {
           const sub = pd.items.reduce((a, i) => a + i.cantidad * i.precio, 0)
           const paso = siguiente[pd.estado]
           return (
-            <Hoja key={pd.id} viva className="p-6">
+            <Hoja key={pd.id} viva className="p-5 sm:p-6">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2.5 flex-wrap">
@@ -84,14 +85,19 @@ export default function Pedidos() {
                   <p className="text-xs text-tinta-50 mt-1">
                     {pd.envio ? `incluye ${money(pd.envio)} de envío` : 'sin cargo de envío'}
                   </p>
-                  {paso && (
-                    <Boton
-                      variante="fantasma"
-                      className="mt-3"
-                      onClick={() => s.dispatch({ type: 'PEDIDO_ESTADO', payload: { id: pd.id, estado: paso.estado } })}>
-                      {paso.texto}
-                    </Boton>
-                  )}
+                  <div className="flex flex-wrap justify-end gap-2 mt-3">
+                    <Link to={`/reportes/remito/${pd.id}`}
+                      className="btn bg-papel border border-tinta/15 px-4 py-2.5 rounded-xl text-sm hover:bg-papel-2 hover:border-tinta/30">
+                      Remito ↓
+                    </Link>
+                    {paso && (
+                      <Boton
+                        variante="fantasma"
+                        onClick={() => s.dispatch({ type: 'PEDIDO_ESTADO', payload: { id: pd.id, estado: paso.estado } })}>
+                        {paso.texto}
+                      </Boton>
+                    )}
+                  </div>
                 </div>
               </div>
             </Hoja>
