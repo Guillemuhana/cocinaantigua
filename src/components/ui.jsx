@@ -24,8 +24,8 @@ export function Dato({ etiqueta, valor, detalle, tono = 'normal', destacado = fa
   }[tono]
   return (
     <div>
-      <p className="text-xs font-medium text-tinta-50">{etiqueta}</p>
-      <p className={`mt-1.5 ${destacado ? 'cifra-xl' : 'cifra text-2xl font-semibold'} ${color}`}>{valor}</p>
+      <p className="text-xs font-medium text-tinta-50 truncate">{etiqueta}</p>
+      <p className={`mt-1.5 ${destacado ? 'cifra-xl' : 'cifra text-xl font-semibold'} ${color}`}>{valor}</p>
       {detalle && <p className="text-xs text-tinta-50 mt-1.5">{detalle}</p>}
     </div>
   )

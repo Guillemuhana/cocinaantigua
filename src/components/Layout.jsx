@@ -1,6 +1,7 @@
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useStore } from '../lib/store'
 import Firma from './Firma'
+import BarraDemo from './BarraDemo'
 
 const enlaces = [
   { to: '/',         texto: 'Panel',    end: true },
@@ -11,11 +12,12 @@ const enlaces = [
 
 export default function Layout() {
   const { pedidos } = useStore()
-  const { pathname } = useLocation()
   const pendientes = pedidos.filter(p => ['pendiente_pago', 'pagado', 'en_preparacion'].includes(p.estado)).length
 
   return (
     <div className="min-h-dvh flex flex-col bg-papel-2/50">
+      <BarraDemo lado="sistema" />
+
       <header className="border-b border-tinta/10 bg-papel/80 backdrop-blur-md sticky top-0 z-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex items-center gap-6 h-24">
@@ -53,16 +55,6 @@ export default function Layout() {
                   )}
                 </NavLink>
               ))}
-              <Link
-                to="/tienda"
-                className={`text-sm font-medium whitespace-nowrap px-3 py-2 rounded-lg border transition-colors ${
-                  pathname.startsWith('/tienda')
-                    ? 'bg-tinta text-papel border-tinta'
-                    : 'bg-papel border-tinta/15 text-tinta hover:bg-papel-2'
-                }`}
-              >
-                Ver la tienda ↗
-              </Link>
             </nav>
           </div>
         </div>
@@ -75,7 +67,7 @@ export default function Layout() {
       <footer className="border-t border-tinta/10 mt-8 bg-papel">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8 flex flex-wrap items-end gap-6 justify-between">
           <div className="space-y-1">
-            <p className="text-xs text-tinta-50">Demostración con datos de ejemplo</p>
+            <p className="text-xs text-tinta-50">Sistema interno · datos de ejemplo</p>
             <p className="text-xs text-tinta-50">Ninguna operación se guarda al recargar</p>
           </div>
           <Firma />

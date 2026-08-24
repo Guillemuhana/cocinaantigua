@@ -25,6 +25,7 @@ const estadoInicial = {
   pedidos: seed.pedidos,
   metodosEnvio: seed.metodosEnvio,
   carritoWeb: [],
+  modoTienda: 'minorista',   // o 'mayorista'
 }
 
 let seq = 1000
@@ -78,6 +79,14 @@ function reducer(state, action) {
     case 'CARRITO_VACIAR':
       return { ...state, carritoWeb: [] }
 
+    /* Cambiar de modo vacía el carrito. Los precios y las unidades mínimas
+       son distintos en cada canal, así que arrastrar lo elegido dejaría
+       cantidades que no son múltiplo de bulto y precios del canal anterior. */
+    case 'TIENDA_MODO':
+      return state.modoTienda === action.payload.modo
+        ? state
+        : { ...state, modoTienda: action.payload.modo, carritoWeb: [] }
+
     case 'CREAR_PEDIDO': {
       const numero = Math.max(...state.pedidos.map(p => p.numero)) + 1
       return {
@@ -113,6 +122,14 @@ export const useStore = () => {
 
 function selectores(s) {
   const producto = (id) => s.productos.find(p => p.id === id)
+
+  /* Precio mayorista: el de la web menos el descuento acordado, redondeado
+     a múltiplos de 50 para que no queden precios con cifras raras. */
+  const precioMayorista = (p) =>
+    Math.round(p.precioWeb * (1 - seed.condicionesMayorista.descuento) / 50) * 50
+
+  const precioSegunModo = (p) =>
+    s.modoTienda === 'mayorista' ? precioMayorista(p) : p.precioWeb
   const evento   = (id) => s.eventos.find(e => e.id === id)
   const persona  = (id) => s.personal.find(p => p.id === id)
 
@@ -258,6 +275,47 @@ function selectores(s) {
   const totalPedido = (pd) =>
     pd.items.reduce((a, i) => a + i.cantidad * i.precio, 0) + (pd.envio || 0)
 
+  /* Ranking de sabores: suma lo vendido en ferias y por la web, para saber
+     qué conviene cocinar más. Es la pregunta que se hace antes de cada tanda. */
+  const rankingProductos = () => {
+    const acc = {}
+    const sumar = (productoId, cantidad, importe) => {
+      const p = producto(productoId)
+      if (!p) return
+      acc[productoId] ??= { producto: p, unidades: 0, bruto: 0 }
+      acc[productoId].unidades += cantidad
+      acc[productoId].bruto += importe
+    }
+
+    s.ventas.flatMap(v => v.items).forEach(i => sumar(i.productoId, i.cantidad, i.cantidad * i.precio))
+    s.pedidos
+      .filter(pd => ['pagado', 'en_preparacion', 'despachado', 'entregado'].includes(pd.estado))
+      .flatMap(pd => pd.items)
+      .forEach(i => sumar(i.productoId, i.cantidad, i.cantidad * i.precio))
+
+    return Object.values(acc).sort((a, b) => b.unidades - a.unidades)
+  }
+
+  /* Cómo paga la gente, sumando todas las ferias. Define cuánta plata queda
+     atada a comisiones y cuánto efectivo hay que contar al cierre. */
+  const mediosDePago = () => {
+    const acc = {}
+    s.ventas.flatMap(v => v.pagos).forEach(pg => {
+      acc[pg.medio] ??= { medio: pg.medio, bruto: 0, comision: 0, operaciones: 0 }
+      acc[pg.medio].bruto += pg.importe
+      acc[pg.medio].comision += pg.importe * (pg.comision || 0) / 100
+      acc[pg.medio].operaciones += 1
+    })
+    return Object.values(acc).sort((a, b) => b.bruto - a.bruto)
+  }
+
+  /* Lo vendido por feria, para compararlas entre sí de un vistazo. */
+  const ventasPorEvento = () =>
+    s.eventos
+      .map(e => ({ evento: e, ...resultadoEvento(e.id) }))
+      .filter(r => r.bruto > 0)
+      .sort((a, b) => b.bruto - a.bruto)
+
   /* v_resultado_canal — ¿rinde más una feria o la web? */
   const resultadoCanal = () => {
     const ferias = s.eventos.map(e => resultadoEvento(e.id))
@@ -265,21 +323,38 @@ function selectores(s) {
     const costoFerias = ferias.reduce((a, r) => a + r.costo, 0)
 
     const pagados = s.pedidos.filter(p => ['pagado', 'en_preparacion', 'despachado', 'entregado'].includes(p.estado))
-    const brutoWeb = pagados.reduce((a, pd) => a + pd.items.reduce((b, i) => b + i.cantidad * i.precio, 0), 0)
-    const unidadesWeb = pagados.reduce((a, pd) => a + pd.items.reduce((b, i) => b + i.cantidad, 0), 0)
-    const envioWeb = pagados.reduce((a, pd) => a + (pd.envio || 0), 0)
-    const costoWeb = pagados.reduce((a, pd) =>
-      a + pd.items.reduce((b, i) => b + i.cantidad * (producto(i.productoId)?.costo || 0), 0), 0)
+
+    const resumirPedidos = (nombre, lista) => {
+      const bruto = lista.reduce((a, pd) => a + pd.items.reduce((b, i) => b + i.cantidad * i.precio, 0), 0)
+      const costo = lista.reduce((a, pd) =>
+        a + pd.items.reduce((b, i) => b + i.cantidad * (producto(i.productoId)?.costo || 0), 0), 0)
+      return {
+        canal: nombre,
+        operaciones: lista.length,
+        unidades: lista.reduce((a, pd) => a + pd.items.reduce((b, i) => b + i.cantidad, 0), 0),
+        bruto, costo,
+        envio: lista.reduce((a, pd) => a + (pd.envio || 0), 0),
+        margenBruto: bruto - costo,
+      }
+    }
 
     return [
-      { canal: 'Ferias', operaciones: ferias.reduce((a, r) => a + r.tickets, 0), unidades: ferias.reduce((a, r) => a + r.unidades, 0), bruto: brutoFerias, costo: costoFerias, margenBruto: brutoFerias - costoFerias },
-      { canal: 'Tienda online', operaciones: pagados.length, unidades: unidadesWeb, bruto: brutoWeb, envio: envioWeb, costo: costoWeb, margenBruto: brutoWeb - costoWeb },
+      {
+        canal: 'Ferias',
+        operaciones: ferias.reduce((a, r) => a + r.tickets, 0),
+        unidades: ferias.reduce((a, r) => a + r.unidades, 0),
+        bruto: brutoFerias, costo: costoFerias, margenBruto: brutoFerias - costoFerias,
+      },
+      resumirPedidos('Tienda online', pagados.filter(p => p.canal !== 'mayorista')),
+      resumirPedidos('Mayoristas', pagados.filter(p => p.canal === 'mayorista')),
     ]
   }
 
   return {
     producto, evento, persona, ventasDe, totalVenta, cobradoVenta, netoVenta,
+    precioMayorista, precioSegunModo, condicionesMayorista: seed.condicionesMayorista,
     stockEvento, stockCentral, stockWeb, arqueo, ventasPorMedio,
+    rankingProductos, mediosDePago, ventasPorEvento,
     resultadoEvento, liquidacion, totalPedido, resultadoCanal,
   }
 }

@@ -139,12 +139,18 @@
     letter-spacing: -0.032em;
   }
 
-  /* Cifra protagonista del panel: es el dato que se mira primero. */
+  /* Cifra protagonista del panel: es el dato que se mira primero.
+
+     El tope está calculado, no elegido: el importe más largo que puede
+     aparecer ("$ 5.820.500") mide 5,55 em en Inter con cifras tabulares.
+     A 2rem son 178px, y la columna más angosta en la que vive — un tercio
+     de la tarjeta a 640px — mide 165px de contenido. Con un tope más alto
+     se desborda y se monta sobre la cifra de al lado. */
   .cifra-xl {
     font-variant-numeric: tabular-nums;
     font-weight: 700;
-    font-size: clamp(1.875rem, 1.4rem + 1.6vw, 2.5rem);
-    line-height: 1;
+    font-size: clamp(1.375rem, 1.05rem + 1.4vw, 2rem);
+    line-height: 1.05;
     letter-spacing: -0.035em;
   }
 

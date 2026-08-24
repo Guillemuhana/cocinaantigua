@@ -193,6 +193,20 @@ export const ventas = [
     pagos: [{ medio: 'efectivo', importe: 2100000, comision: 0 }, { medio: 'posnet', importe: 980000, comision: 6.5 }, { medio: 'transferencia', importe: 152000, comision: 0 }] },
 ]
 
+/* ===========================================================================
+   Canal mayorista.
+
+   Estos cuatro números son los que el cliente va a querer discutir. Están
+   juntos y en un solo lugar a propósito: se cambian acá y se propagan solos
+   a la tienda, al carrito y a los informes.
+   =========================================================================== */
+export const condicionesMayorista = {
+  descuento: 0.35,          // 35% menos que el precio de la web
+  minimoFrascos: 24,        // no se despacha un pedido más chico
+  bulto: 6,                 // se vende de a cajas de 6 del mismo sabor
+  envioGratisDesde: 150000, // en pesos, sobre el subtotal
+}
+
 export const metodosEnvio = [
   { id: 'me1', nombre: 'Retiro en el taller (Córdoba)', tipo: 'retiro_local',  costo: 0,     gratisDesde: null,  plazo: 'Coordinamos por WhatsApp' },
   { id: 'me2', nombre: 'Te lo llevo a la feria',        tipo: 'retiro_evento', costo: 0,     gratisDesde: null,  plazo: 'Retirás en nuestro stand' },
@@ -201,14 +215,26 @@ export const metodosEnvio = [
 ]
 
 export const pedidos = [
-  { id: 'pd1', numero: 1041, cliente: 'Ana Pérez',      email: 'ana@ejemplo.com',    localidad: 'Rosario, Santa Fe',  estado: 'pagado',         envio: 12000, medio: 'transferencia', fecha: '2026-08-23T09:14:00',
+  { id: 'pd1', numero: 1041, cliente: 'Ana Pérez',      email: 'ana@ejemplo.com',    localidad: 'Rosario, Santa Fe',  canal: 'minorista', estado: 'pagado',         envio: 12000, medio: 'transferencia', fecha: '2026-08-23T09:14:00',
     items: [{ productoId: 'p1', cantidad: 3, precio: 8500 }] },
-  { id: 'pd2', numero: 1042, cliente: 'Julián Sosa',    email: 'julian@ejemplo.com', localidad: 'CABA',              estado: 'pendiente_pago', envio: 12000, medio: 'transferencia', fecha: '2026-08-23T18:02:00',
+  { id: 'pd2', numero: 1042, cliente: 'Julián Sosa',    email: 'julian@ejemplo.com', localidad: 'CABA',              canal: 'minorista', estado: 'pendiente_pago', envio: 12000, medio: 'transferencia', fecha: '2026-08-23T18:02:00',
     items: [{ productoId: 'p7', cantidad: 2, precio: 11000 }, { productoId: 'p6', cantidad: 1, precio: 9500 }] },
-  { id: 'pd3', numero: 1043, cliente: 'Vale Gutiérrez', email: 'vale@ejemplo.com',   localidad: 'Córdoba Capital',   estado: 'en_preparacion', envio: 0,     medio: 'transferencia', fecha: '2026-08-24T08:40:00',
+  { id: 'pd3', numero: 1043, cliente: 'Vale Gutiérrez', email: 'vale@ejemplo.com',   localidad: 'Córdoba Capital',   canal: 'minorista', estado: 'en_preparacion', envio: 0,     medio: 'transferencia', fecha: '2026-08-24T08:40:00',
     items: [{ productoId: 'p2', cantidad: 4, precio: 8500 }, { productoId: 'p3', cantidad: 2, precio: 8000 }] },
-  { id: 'pd4', numero: 1040, cliente: 'Nico Ferreyra',  email: 'nico@ejemplo.com',   localidad: 'Neuquén',           estado: 'despachado',     envio: 12000, medio: 'transferencia', fecha: '2026-08-21T16:20:00',
+  { id: 'pd4', numero: 1040, cliente: 'Nico Ferreyra',  email: 'nico@ejemplo.com',   localidad: 'Neuquén',           canal: 'minorista', estado: 'despachado',     envio: 12000, medio: 'transferencia', fecha: '2026-08-21T16:20:00',
     items: [{ productoId: 'p5', cantidad: 2, precio: 9000 }, { productoId: 'p1', cantidad: 2, precio: 8500 }] },
+
+  // Revendedores. Compran por bulto y con precio mayorista.
+  { id: 'pd5', numero: 1044, cliente: 'Lucía Ibarra', negocio: 'Almacén La Rueda', cuit: '27-31448902-4',
+    email: 'compras@larueda.com.ar', localidad: 'Villa María, Córdoba',
+    canal: 'mayorista', estado: 'pagado', envio: 0, medio: 'transferencia', fecha: '2026-08-22T11:30:00',
+    items: [{ productoId: 'p1', cantidad: 12, precio: 5550 }, { productoId: 'p2', cantidad: 12, precio: 5550 },
+            { productoId: 'p3', cantidad: 6, precio: 5200 }] },
+  { id: 'pd6', numero: 1045, cliente: 'Hernán Roldán', negocio: 'Delicatessen del Sur', cuit: '20-28776105-9',
+    email: 'hola@delidelsur.com.ar', localidad: 'Bariloche, Río Negro',
+    canal: 'mayorista', estado: 'en_preparacion', envio: 12000, medio: 'transferencia', fecha: '2026-08-24T10:05:00',
+    items: [{ productoId: 'p6', cantidad: 6, precio: 6200 }, { productoId: 'p7', cantidad: 6, precio: 7150 },
+            { productoId: 'p1', cantidad: 12, precio: 5550 }] },
 ]
 
 export const descripcionesWeb = {

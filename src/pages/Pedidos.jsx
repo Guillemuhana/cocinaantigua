@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useStore } from '../lib/store'
 import { money, num, fecha, hora, etiquetaPedido } from '../lib/format'
 import { Placa, Hoja, Chip, Boton } from '../components/ui'
@@ -14,18 +15,40 @@ const siguiente = {
   despachado:     { estado: 'entregado',      texto: 'Marcar entregado' },
 }
 
+const filtros = [
+  { id: 'todos',      texto: 'Todos' },
+  { id: 'minorista',  texto: 'Del público' },
+  { id: 'mayorista',  texto: 'De revendedores' },
+]
+
 export default function Pedidos() {
   const s = useStore()
-  const lista = [...s.pedidos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+  const [filtro, setFiltro] = useState('todos')
+
+  const todos = [...s.pedidos].sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+  const lista = filtro === 'todos' ? todos : todos.filter(p => (p.canal || 'minorista') === filtro)
+  const cuantos = (id) => id === 'todos' ? todos.length : todos.filter(p => (p.canal || 'minorista') === id).length
 
   return (
     <div className="space-y-10">
       <Placa sub="Las compras que entran por la tienda online, en el orden en que llegaron">Pedidos de la web</Placa>
 
       <p className="text-sm text-tinta-50 max-w-prose leading-relaxed">
-        El stock no se descuenta cuando alguien compra: se descuenta cuando la plata está acreditada.
-        Mientras tanto queda reservado 48 horas y después se libera solo.
+        Entran juntos los pedidos del público y los de los revendedores. El stock no se descuenta
+        cuando alguien compra: se descuenta cuando la plata está acreditada. Mientras tanto queda
+        reservado 48 horas y después se libera solo.
       </p>
+
+      <div className="flex flex-wrap gap-1">
+        {filtros.map(f => (
+          <button key={f.id} onClick={() => setFiltro(f.id)}
+            className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors ${
+              filtro === f.id ? 'bg-higo text-papel' : 'text-tinta-50 hover:text-tinta hover:bg-papel-2'}`}>
+            {f.texto}
+            <span className={`ml-2 cifra ${filtro === f.id ? 'text-papel/70' : 'text-tinta-50'}`}>{cuantos(f.id)}</span>
+          </button>
+        ))}
+      </div>
 
       <div className="escalona space-y-4">
         {lista.map(pd => {
@@ -38,10 +61,14 @@ export default function Pedidos() {
                   <div className="flex items-center gap-2.5 flex-wrap">
                     <span className="cifra text-sm text-tinta-50">#{pd.numero}</span>
                     <Chip tono={tono[pd.estado]}>{etiquetaPedido[pd.estado]}</Chip>
+                    {pd.canal === 'mayorista' && <Chip tono="marca">Revendedor</Chip>}
                   </div>
-                  <p className="text-lg font-semibold tracking-tight mt-1.5">{pd.cliente}</p>
+                  <p className="text-lg font-semibold tracking-tight mt-1.5">
+                    {pd.negocio || pd.cliente}
+                  </p>
                   <p className="text-xs text-tinta-50 mt-0.5">
-                    {pd.localidad} · {fecha(pd.fecha)} {hora(pd.fecha)}
+                    {pd.negocio && `${pd.cliente} · `}{pd.localidad} · {fecha(pd.fecha)} {hora(pd.fecha)}
+                    {pd.cuit && ` · CUIT ${pd.cuit}`}
                   </p>
                   <ul className="mt-3 space-y-0.5">
                     {pd.items.map(i => (
