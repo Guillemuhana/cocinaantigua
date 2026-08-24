@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+/* ===========================================================================
+   Sistema visual — Cocina Antigua
+
+   La paleta sale del producto: higo, damasco, membrillo. El fondo es el papel
+   de las etiquetas viejas, no un gris de dashboard.
+
+   Dos superficies distintas a propósito:
+     · Administración → papel claro, para leer números adentro
+     · Punto de venta  → pizarra oscura, como el cartel de precios del puesto.
+       En una feria al sol una pantalla clara no se ve, y además el vendedor ya
+       está acostumbrado a leer los precios de un pizarrón.
+   =========================================================================== */
+
+@theme {
+  --color-papel:      #F2EFE4;   /* papel de etiqueta */
+  --color-papel-2:    #E7E2D2;   /* papel con sombra */
+  --color-tinta:      #2B1A2B;   /* tinta de imprenta, casi negro violáceo */
+  --color-tinta-50:   #6A5568;
+
+  --color-higo:       #6B2D4E;   /* mermelada de higo — color de marca */
+  --color-higo-claro: #8E4468;
+  --color-damasco:    #D98324;   /* damasco — acento de acción */
+  --color-membrillo:  #A33B1F;   /* alerta / faltante */
+  --color-laurel:     #4A6B4F;   /* confirmación */
+
+  --color-pizarra:    #1C2620;   /* verde pizarrón */
+  --color-pizarra-2:  #27332B;
+  --color-tiza:       #EFEDE2;
+
+  --font-display: "Bodoni Moda", Georgia, serif;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    background-color: var(--color-papel);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Foco visible siempre: se usa con guantes y apurado. */
+  :focus-visible {
+    outline: 2px solid var(--color-damasco);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* --- Elemento firma: la placa de etiqueta de frasco ---------------------
+     Doble filete y versalitas, como las etiquetas de dulce de toda la vida.
+     Se usa una sola vez por pantalla, para el título. */
+  .placa {
+    position: relative;
+    display: inline-block;
+    padding: 0.5rem 1.75rem 0.6rem;
+    border-top: 3px double currentColor;
+    border-bottom: 3px double currentColor;
+  }
+  .placa::before,
+  .placa::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 5px; height: 5px;
+    transform: translateY(-50%) rotate(45deg);
+    background: currentColor;
+  }
+  .placa::before { left: 6px; }
+  .placa::after  { right: 6px; }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .cifra {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* Superficie de papel con borde fino, no card con sombra difusa */
+  .hoja {
+    background: #FBF9F3;
+    border: 1px solid color-mix(in srgb, var(--color-tinta) 14%, transparent);
+  }
+
+  .btn {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: transform 0.08s ease, background-color 0.15s ease;
+  }
+  .btn:active { transform: translateY(1px); }
+}
